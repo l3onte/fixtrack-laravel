@@ -23,7 +23,17 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('name')->required(),
+                Forms\Components\TextInput::make('email')
+                    ->required()
+                    ->email()
+                    ->unique(ignoreRecord: true),
+                Forms\Components\TextInput::make('password')
+                    ->password()
+                    ->required(fn (string $context): bool => $context === 'create')
+                    ->dehydrated(fn ($state) => filled($state))
+                    ->dehydrateStateUsing(fn ($state) => \Illuminate\Support\Facades\Hash::make($state)) // ¡AQUÍ SE ENCRIPTA!
+                    ->label('Password'),
             ]);
     }
 
@@ -31,7 +41,16 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('name')
+                    ->label('Name'),
+                Tables\Columns\TextColumn::make('email')
+                    ->label('Email'),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Created At')
+                    ->dateTime('d-m-Y H:i:s'),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Updated At')
+                    ->dateTime('d-m-Y H:i:s'),
             ])
             ->filters([
                 //
