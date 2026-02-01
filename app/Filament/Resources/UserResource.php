@@ -32,7 +32,7 @@ class UserResource extends Resource
                     ->password()
                     ->required(fn (string $context): bool => $context === 'create')
                     ->dehydrated(fn ($state) => filled($state))
-                    ->dehydrateStateUsing(fn ($state) => \Illuminate\Support\Facades\Hash::make($state)) // ¡AQUÍ SE ENCRIPTA!
+                    ->dehydrateStateUsing(fn ($state) => \Illuminate\Support\Facades\Hash::make($state))
                     ->label('Password'),
             ]);
     }
